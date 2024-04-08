@@ -1,43 +1,47 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Node;
 using UnityEngine;
 
-public class CheckCorrect : MonoBehaviour
+namespace UI
 {
-    [SerializeField] private ListCorrect correct;
-    [SerializeField] private View view;
-
-    private List<string> _path = new();
-    private List<string> _nameActive = new();
-
-    private void OnEnable()
+    public class CheckCorrect : MonoBehaviour
     {
-        view.SpawnButton += CheckName;
-        view.ResetButton += e => e.AddClick(IsCorrect);
-    }
+        [SerializeField] private ListCorrect correct;
+        [SerializeField] private View view;
 
-    private void CheckName(ButtonCheck button)
-    {
-        foreach (var item in _nameActive)
-            if (button.KeyActive == item)
-            {
-                button.CheckCorrect();
-                return;
-            }
-    }
+        private readonly List<string> _path = new();
+        private readonly List<string> _nameActive = new();
 
-    private void IsCorrect(string key)
-    {
-        _path.Add(key);
-        var c = correct.GetSequence(_path.First());
-
-        if (correct.GetSequence(key))
+        private void OnEnable()
         {
-            _path.Clear();
-            _path.Add(key);
+            view.HandlingButtonStateAfterSpawning += CheckName;
+            view.DataValidation += IsCorrect;
         }
 
-        if (c && c.IsCorrect(_path))
-            _nameActive.Add(_path.First());
+        private void CheckName(ButtonCheck button)
+        {
+            foreach (var item in _nameActive)
+                if (button.KeyActive == item)
+                {
+                    button.CheckCorrect();
+                    return;
+                }
+        }
+
+        private void IsCorrect(string key)
+        {
+            _path.Add(key);
+            var c = correct.GetSequence(_path.First());
+
+            if (correct.GetSequence(key))
+            {
+                _path.Clear();
+                _path.Add(key);
+            }
+
+            if (c && c.IsCorrect(_path))
+                _nameActive.Add(_path.First());
+        }
     }
 }

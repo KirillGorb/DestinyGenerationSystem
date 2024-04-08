@@ -1,27 +1,33 @@
 ﻿using System.Linq;
+using Extension.Attribute;
 using UnityEditor;
 using UnityEngine;
 
-[CustomPropertyDrawer(typeof(StringListAttribute))]
-public class StringListAttributeDrawer : PropertyDrawer
+namespace Editor
 {
-    public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
+    [CustomPropertyDrawer(typeof(DropDownListStringAttribute))]
+    public class DropDownListStringAttributeDrawer : PropertyDrawer
     {
-        var attr = attribute as StringListAttribute;
-        var strings = attr.stringListAsset.strings;
-
-        if (strings.Length == 0)
+        public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
-            EditorGUI.LabelField(position, label.text, "No strings in the list.");
-            return;
-        }
+            var attr = attribute as DropDownListStringAttribute;
+            if (attr == null) return;
 
-        var index = strings.ToList().IndexOf(property.stringValue);
-        var newIndex = EditorGUI.Popup(position, label.text, index, strings);
+            var strings = attr.ListStringSettingAsset.strings;
 
-        if (newIndex != index)
-        {
-            property.stringValue = strings[newIndex];
+            if (strings.Length == 0)
+            {
+                EditorGUI.LabelField(position, label.text, "No strings in the list.");
+                return;
+            }
+
+            var index = strings.ToList().IndexOf(property.stringValue);
+            var newIndex = EditorGUI.Popup(position, label.text, index, strings);
+
+            if (newIndex != index)
+            {
+                property.stringValue = strings[newIndex];
+            }
         }
     }
 }

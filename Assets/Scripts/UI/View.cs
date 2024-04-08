@@ -1,58 +1,77 @@
 using System;
 using System.Collections.Generic;
+using Node;
+using Extension;
+using Extension.Attribute;
+using TMPro;
 using UnityEngine;
 
-public class View : MonoBehaviour
+namespace UI
 {
-    [SerializeField] private ConteinerNodes nodes;
-
-    [SerializeField] private Transform parentGrid;
-    [SerializeField] private ButtonCheck prefab;
-    [SerializeField, StringList] private string initKey;
-
-    private PoolList<ButtonCheck> _pool;
-    private readonly List<ButtonCheck> _activeObjs = new();
-
-    public event Action<ButtonCheck> ResetButton;
-    public event Action<ButtonCheck> SpawnButton;
-
-    private void Awake()
+    public class View : MonoBehaviour
     {
-        _pool = new PoolList<ButtonCheck>().SetParent(parentGrid).SetPrefab(prefab)
-            .SetResetMethod(e =>
-            {
-                ResetButton?.Invoke(e);
-                e.AddClick(Review);
-            });
+        [SerializeField] private ContainerNodes nodes;
 
-        nodes.Init();
-    }
+        [SerializeField] private Transform parentGrid;
+        [SerializeField] private ButtonCheck prefab;
+        [SerializeField] private TMP_Text textDescription;
+        [SerializeField, DropDownListString] private string initKey;
 
-    private void Start()
-    {
-        Generate(initKey);
-    }
+        private PoolList<ButtonCheck> _pool;
+        private readonly List<ButtonCheck> _activeObjs = new();
 
-    private void Review(string key)
-    {
-        Clear();
-        Generate(nodes.GetNode(key).IsEnd ? initKey : key);
-    }
+        public event Action<string> DataValidation;
+        public event Action<ButtonCheck> HandlingButtonStateAfterSpawning;
 
-    private void Clear()
-    {
-        foreach (var item in _activeObjs)
-            _pool.Destroy(item);
-        _activeObjs.Clear();
-    }
-
-    private void Generate(string key)
-    {
-        foreach (var item in nodes.Value(key))
+        private void Awake()
         {
-            var b = _pool.Create().SetKey(nodes.GetNode(item));
-            _activeObjs.Add(b);
-            SpawnButton?.Invoke(b);
+            _pool = new PoolList<ButtonCheck>().SetParent(parentGrid).SetPrefab(prefab);
+            nodes.Init();
+        }
+
+        private void Start()
+        {
+            textDescription.text = initKey;
+            Generate(initKey);
+        }
+
+        private void Review(string key)
+        {
+            DataValidation?.Invoke(key);
+            Clear();
+            LogicGenerate(key);
+        }
+
+        private void LogicGenerate(string key)
+        {
+            if (nodes.GetNode(key).IsEnd)
+            {
+                Generate(initKey);
+                textDescription.text = initKey;
+            }
+            else
+            {
+                Generate(key);
+                textDescription.text = key;
+            }
+        }
+
+        private void Clear()
+        {
+            foreach (var item in _activeObjs)
+                _pool.Destroy(item);
+            _activeObjs.Clear();
+        }
+
+        private void Generate(string key)
+        {
+            foreach (var item in nodes.Value(key))
+            {
+                var b = _pool.Create().SetKey(nodes.GetNode(item));
+                b.AddClick(Review);
+                _activeObjs.Add(b);
+                HandlingButtonStateAfterSpawning?.Invoke(b);
+            }
         }
     }
 }

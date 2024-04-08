@@ -195,7 +195,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.5647059, g: 0.8039216, b: 0.53333336, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -271,5 +271,5 @@ MonoBehaviour:
   button: {fileID: 7050457623940350589}
   text: {fileID: 7162654899656015983}
   img: {fileID: 905350013689213252}
-  correctColor: {r: 0.43271622, g: 0.83396226, b: 0.43271622, a: 1}
-  initColor: {r: 1, g: 1, b: 1, a: 1}
+  correctColor: {r: 0.43925232, g: 0.7207546, b: 0.43925232, a: 1}
+  initColor: {r: 0.5647059, g: 0.8039216, b: 0.53333336, a: 1}

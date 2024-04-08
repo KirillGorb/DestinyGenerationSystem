@@ -1,14 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
+using Extension.Attribute;
 using UnityEngine;
 
-[Serializable]
-public struct Node
+namespace Node
 {
-    [StringList] public string Key;
-    [TextArea] public string Valye;
+    [Serializable]
+    public struct Node
+    {
+        [SerializeField, DropDownListString] private string key;
+        [SerializeField, TextArea] private string description;
 
-    [StringList] public List<string> Keys;
+        [SerializeField, DropDownListString] private List<string> keys;
 
-    public bool IsEnd => Keys.Count <= 0;
+        public bool IsEnd => keys.Count <= 0;
+
+        public string Key => key;
+        public string Value => description;
+        public IReadOnlyList<string> Keys => keys;
+    }
 }
