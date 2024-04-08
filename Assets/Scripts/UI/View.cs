@@ -15,7 +15,9 @@ namespace UI
         [SerializeField] private Transform parentGrid;
         [SerializeField] private ButtonCheck prefab;
         [SerializeField] private TMP_Text textDescription;
-        [SerializeField, DropDownListString] private string initKey;
+
+        [SerializeField, DropDownListString("ListStringSetting")]
+        private string initKey;
 
         private PoolList<ButtonCheck> _pool;
         private readonly List<ButtonCheck> _activeObjs = new();
@@ -25,7 +27,8 @@ namespace UI
 
         private void Awake()
         {
-            _pool = new PoolList<ButtonCheck>().SetParent(parentGrid).SetPrefab(prefab);
+            _pool = new PoolList<ButtonCheck>().SetParent(parentGrid).SetPrefab(prefab)
+                .SetResetMethod(e => e.ResetState());
             nodes.Init();
         }
 

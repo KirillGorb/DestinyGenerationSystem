@@ -19,10 +19,10 @@ namespace UI
 
         private void Start()
         {
-            button.onClick.AddListener(() => _click(KeyActive));
+            button.onClick.AddListener(() => _click?.Invoke(KeyActive));
         }
 
-        private void OnDisable()
+        public void ResetState()
         {
             img.color = initColor;
             button.interactable = true;

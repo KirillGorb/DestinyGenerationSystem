@@ -8,10 +8,10 @@ namespace Node
     [Serializable]
     public struct Node
     {
-        [SerializeField, DropDownListString] private string key;
+        [SerializeField, DropDownListString("ListStringSetting")] private string key;
         [SerializeField, TextArea] private string description;
 
-        [SerializeField, DropDownListString] private List<string> keys;
+        [SerializeField, DropDownListString("ListStringSetting")] private List<string> keys;
 
         public bool IsEnd => keys.Count <= 0;
 

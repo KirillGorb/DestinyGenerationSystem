@@ -7,8 +7,8 @@ namespace Node
     [CreateAssetMenu(fileName = "CorrectSequence", menuName = "Node/CorrectSequence", order = 0)]
     public class CorrectSequence : ScriptableObject
     {
-        [SerializeField, DropDownListString] private string person;
-        [SerializeField, DropDownListString] private List<string> sequence;
+        [SerializeField, DropDownListString("ListStringSetting")] private string person;
+        [SerializeField, DropDownListString("ListStringSetting")] private List<string> sequence;
 
         [SerializeField, TextArea] private string finalDescription;
 

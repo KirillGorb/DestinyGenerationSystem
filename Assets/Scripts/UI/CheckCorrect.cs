@@ -9,9 +9,12 @@ namespace UI
     {
         [SerializeField] private ListCorrect correct;
         [SerializeField] private View view;
+        [SerializeField] private GameObject buttonCheckResult;
 
         private readonly List<string> _path = new();
         private readonly List<string> _nameActive = new();
+
+        public IReadOnlyList<string> ActiveNames => _nameActive;
 
         private void OnEnable()
         {
@@ -23,10 +26,9 @@ namespace UI
         {
             foreach (var item in _nameActive)
                 if (button.KeyActive == item)
-                {
                     button.CheckCorrect();
-                    return;
-                }
+
+            buttonCheckResult.SetActive(_nameActive.Count > 0);
         }
 
         private void IsCorrect(string key)
